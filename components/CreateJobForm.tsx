@@ -2,9 +2,10 @@
 
 import { createAndEditJobSchema, CreateAndEditJobType, JobMode, JobStatus } from "@/utils/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import CustomFormField, { CustomFormSelect } from "./FormComponents";
 import { Button } from "./ui/button";
+import { Form } from "./ui/form";
 
 const CreateJobForm = () => {
   const form = useForm<CreateAndEditJobType>({
