@@ -6,6 +6,10 @@ import { useForm } from "react-hook-form";
 import CustomFormField, { CustomFormSelect } from "./FormComponents";
 import { Button } from "./ui/button";
 import { Form } from "./ui/form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { createJobAction } from "@/utils/actions";
+import { toast } from "sonner";
 
 const CreateJobForm = () => {
   const form = useForm<CreateAndEditJobType>({
@@ -19,8 +23,29 @@ const CreateJobForm = () => {
     },
   });
 
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (values: CreateAndEditJobType) => createJobAction(values),
+    onSuccess: (data) => {
+      if (!data) {
+        toast.error("Failed to create job");
+        return;
+      }
+
+      toast.success("Job created successfully");
+      queryClient.invalidateQueries({ queryKey: ["jobs"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["charts"] });
+
+      //   form.reset();
+
+      router.push("/jobs");
+    },
+  });
+
   function onSubmit(values: CreateAndEditJobType) {
-    console.log(values);
+    mutate(values);
   }
 
   return (
@@ -42,7 +67,7 @@ const CreateJobForm = () => {
           <CustomFormSelect name="mode" control={form.control} labelText="job mode" items={Object.values(JobMode)} />
 
           <Button type="submit" disabled={form.formState.isSubmitting} className="self-end capitalize">
-            Submit
+            {isPending ? "loading..." : "add job"}
           </Button>
         </div>
       </form>
