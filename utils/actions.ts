@@ -57,7 +57,10 @@ export async function getAllJobsAction({
     if (search) {
       whereClause = {
         ...whereClause,
-        OR: [{ position: { contains: search } }, { company: { contains: search } }],
+        OR: [
+          { position: { contains: search, mode: "insensitive" } },
+          { company: { contains: search, mode: "insensitive" } },
+        ],
       };
     }
 
