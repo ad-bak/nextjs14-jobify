@@ -9,6 +9,8 @@ import { Prisma } from "@prisma/client";
 
 function authenticateAndRedirect(): string {
   const { userId } = auth();
+  console.log(userId);
+
   if (!userId) redirect("/");
   return userId;
 }
