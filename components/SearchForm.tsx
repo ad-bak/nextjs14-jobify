@@ -9,8 +9,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 function SearchForm() {
   const router = useRouter();
   const pathname = usePathname();
-
   const searchParams = useSearchParams();
+
   const jobStatus = searchParams.get("jobStatus") || "all";
   const search = searchParams.get("search") || "";
 
